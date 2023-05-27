@@ -4,16 +4,24 @@
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 #![feature(abi_x86_interrupt)]
+#![feature(const_mut_refs)]
 
+#[cfg(test)]
+use bootloader::{entry_point, BootInfo};
+
+extern crate alloc;
+
+pub mod allocator;
 pub mod gdt;
 pub mod interrupts;
+pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
 
 use core::panic::PanicInfo;
 
 pub trait Testable {
-    fn run(&self) -> ();
+    fn run(&self);
 }
 
 impl<T> Testable for T
@@ -42,10 +50,12 @@ pub fn test_panic_handler(info: &PanicInfo) -> ! {
     hlt_loop();
 }
 
+#[cfg(test)]
+entry_point!(test_kernel_main);
+
 /// Entry point for `cargo test`
 #[cfg(test)]
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
     init();
     test_main();
     hlt_loop();
