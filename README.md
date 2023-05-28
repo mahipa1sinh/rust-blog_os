@@ -6,7 +6,7 @@ This is the implementation of the Blog Os from the [Writing an OS in Rust](https
 
 ###Important commands
 
-'''bash
+```bash
 cargo build
 cargo run
-''''
+```
