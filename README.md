@@ -9,6 +9,7 @@ This is the implementation of the Blog Os from the [Writing an OS in Rust](https
 ```bash
 cargo build
 ```
+
 ```bash
 cargo run
 ```
